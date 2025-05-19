@@ -1,11 +1,11 @@
 package com.adista.projectadvance1.model
 
-
+import com.google.gson.annotations.SerializedName
 
 data class UserData(
-    val id: Int,
-    val name: String,
-    val phoneNumber: String,
-    val school: String,
-    val profileImage: String?
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("phone") val phoneNumber: String,
+    @SerializedName("school") val school: String,
+    @SerializedName("photo") val profileImage: String? = null
 )

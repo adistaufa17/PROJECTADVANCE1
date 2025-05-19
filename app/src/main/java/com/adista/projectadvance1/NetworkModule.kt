@@ -1,12 +1,9 @@
-package com.adista.projectadvance1.di
+package com.adista.projectadvance1
 
-import android.content.Context
-import com.adista.projectadvance1.SessionManager
-import com.adista.projectadvance1.network.ApiService
+import com.adista.projectadvance1.core.di.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -47,7 +44,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.6:8000/api/")
+            .baseUrl("http://192.168.1.5:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

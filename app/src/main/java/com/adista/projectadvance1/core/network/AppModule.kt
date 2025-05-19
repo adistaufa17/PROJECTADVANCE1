@@ -1,4 +1,4 @@
-package com.adista.projectadvance1.di
+package com.adista.projectadvance1.core.network
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -3,12 +3,13 @@ package com.adista.projectadvance1
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.adista.projectadvance1.data.LoginRequest
-import com.adista.projectadvance1.data.LoginResponse
-import com.adista.projectadvance1.data.RegisterRequest
-import com.adista.projectadvance1.data.RegisterResponse
+import com.adista.projectadvance1.data.request.LoginRequest
+import com.adista.projectadvance1.data.model.LoginResponse
+import com.adista.projectadvance1.data.request.RegisterRequest
+import com.adista.projectadvance1.data.model.RegisterResponse
+import com.adista.projectadvance1.data.model.AuthResponse
 import com.adista.projectadvance1.model.UserData
-import com.adista.projectadvance1.network.ApiService
+import com.adista.projectadvance1.core.di.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,43 +25,38 @@ class AuthViewModel @Inject constructor(
     private val _loginResult = MutableLiveData<Resource<UserData>>()
     val loginResult: LiveData<Resource<UserData>> = _loginResult
 
+    // Tambahkan ini untuk register result
     private val _registerResult = MutableLiveData<Resource<UserData>>()
     val registerResult: LiveData<Resource<UserData>> = _registerResult
+
+    private val _logoutResult = MutableLiveData<Resource<Boolean>>()
+    val logoutResult: LiveData<Resource<Boolean>> = _logoutResult
 
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> = _loadingState
 
-    fun login(phone: String, password: String) {
+    fun login(phoneNumber: String, password: String) {
         _loadingState.value = true
-        _loginResult.value = Resource.Loading()
-
-        val loginRequest = LoginRequest(phone = phone, password = password)
-        apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+        apiService.login(LoginRequest(phoneNumber, password)).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 _loadingState.value = false
 
-                if (response.isSuccessful) {
-                    val loginResponse = response.body()
-                    if (loginResponse != null && loginResponse.accessToken != null) {
-                        // Simpan token yang diterima dari API
-                        sessionManager.saveAuthToken(loginResponse.accessToken)
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()!!
 
-                        // Buat dummy UserData karena API tidak mengembalikan data user
-                        val userData = UserData(
-                            id = 1,
-                            name = "User",
-                            phoneNumber = phone,
-                            school = "",
-                            profileImage = null
-                        )
+                    if (body.data != null && body.status == "success") {
+                        // Save token - sekarang akses dari data.token
+                        val token = body.data.token
+                        sessionManager.saveAuthToken(token)
 
-                        // Simpan user data ke SessionManager
+                        // Save user data langsung dari response
+                        val userData = body.data.toUserData()
                         sessionManager.saveUser(userData)
 
-                        // Kirim hasil sukses
+                        // Update login result
                         _loginResult.value = Resource.Success(userData)
                     } else {
-                        _loginResult.value = Resource.Error("Invalid login response or missing token")
+                        _loginResult.value = Resource.Error(body.message ?: "Login failed")
                     }
                 } else {
                     _loginResult.value = Resource.Error("Login failed: ${response.message()}")
@@ -74,38 +70,39 @@ class AuthViewModel @Inject constructor(
         })
     }
 
+
+    // Implementasi function register
     fun register(name: String, phoneNumber: String, school: String, password: String, confirmPassword: String) {
         _loadingState.value = true
-        _registerResult.value = Resource.Loading()
 
-        val registerRequest = RegisterRequest(name, phoneNumber, school, password, confirmPassword)
+        val registerRequest = RegisterRequest(
+            name = name,
+            phoneNumber = phoneNumber,
+            school = school,
+            password = password,
+            confirmPassword = confirmPassword
+        )
+
         apiService.register(registerRequest).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 _loadingState.value = false
 
-                if (response.isSuccessful) {
-                    response.body()?.let { registerResponse ->
-                        // Simpan token dari respons (jika API register mengembalikan token)
-                        if (registerResponse.token != null) {
-                            sessionManager.saveAuthToken(registerResponse.token)
-                        }
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()!!
 
-                        // Buat objek UserData dari data pendaftaran
-                        val userData = UserData(
-                            id = registerResponse.user?.id ?: 1,
-                            name = name,
-                            phoneNumber = phoneNumber,
-                            school = school,
-                            profileImage = null
-                        )
+                    if (body.data != null && body.status == "success") {
+                        // Save token dari data.token
+                        val token = body.data.token
+                        sessionManager.saveAuthToken(token)
 
-                        // Simpan user data ke SessionManager
+                        // Save user data langsung dari response
+                        val userData = body.data.toUserData()
                         sessionManager.saveUser(userData)
 
-                        // Kirim hasil sukses
+                        // Update register result
                         _registerResult.value = Resource.Success(userData)
-                    } ?: run {
-                        _registerResult.value = Resource.Error("Register response body is null")
+                    } else {
+                        _registerResult.value = Resource.Error(body.message ?: "Registration failed")
                     }
                 } else {
                     _registerResult.value = Resource.Error("Registration failed: ${response.message()}")
@@ -119,10 +116,6 @@ class AuthViewModel @Inject constructor(
         })
     }
 
-    fun logout() {
-        sessionManager.logout()
-    }
-
     fun getCurrentUser(): UserData? {
         return if (sessionManager.isLoggedIn()) {
             sessionManager.getUserData()
@@ -130,6 +123,29 @@ class AuthViewModel @Inject constructor(
             null
         }
     }
+
+    fun logout() {
+        _loadingState.value = true
+        apiService.logout().enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                _loadingState.value = false
+
+                // Always clear session locally
+                sessionManager.logout()
+
+                _logoutResult.value = Resource.Success(true)
+            }
+
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                _loadingState.value = false
+
+                // Clear session even if API call fails
+                sessionManager.logout()
+                _logoutResult.value = Resource.Success(true)
+            }
+        })
+    }
+
 
     fun isLoggedIn(): Boolean {
         return sessionManager.isLoggedIn()

@@ -1,4 +1,4 @@
-package com.adista.projectadvance1.login
+package com.adista.projectadvance1.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

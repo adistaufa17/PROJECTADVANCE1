@@ -54,7 +54,9 @@ class SessionManager(context: Context) {
     }
 
     fun logout() {
+        val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
     }
+
 }

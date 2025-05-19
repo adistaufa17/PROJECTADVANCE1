@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".register.RegisterActivity">
+    tools:context=".ui.register.RegisterActivity">
 
     <data>
         <variable
             name="viewModel"
-            type="com.adista.projectadvance1.register.RegisterViewModel" />
+            type="com.adista.projectadvance1.ui.register.RegisterViewModel" />
     </data>
 
     <FrameLayout

@@ -1,4 +1,4 @@
-package com.adista.projectadvance1.register
+package com.adista.projectadvance1.ui.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
