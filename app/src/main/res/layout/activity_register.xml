@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.register.RegisterActivity">
+    tools:context=".register.RegisterActivity">
 
     <data>
         <variable
             name="viewModel"
-            type="com.adista.projectadvance1.ui.register.RegisterViewModel" />
+            type="com.adista.projectadvance1.register.RegisterViewModel" />
     </data>
 
     <FrameLayout
@@ -121,7 +121,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
-                        android:text="@={viewModel.phoneNumber}" />
+                        android:text="@={viewModel.phone}"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- School Input -->

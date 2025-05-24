@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".login.LoginActivity">
 
     <data>
         <variable
             name="viewModel"
-            type="com.adista.projectadvance1.ui.login.LoginViewModel" />
+            type="com.adista.projectadvance1.login.LoginViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -106,7 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:text="@={viewModel.phoneNumber}" />
+                    android:text="@={viewModel.phone}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Input -->
