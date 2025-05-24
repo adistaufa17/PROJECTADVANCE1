@@ -1,4 +1,4 @@
-package com.adista.projekadvance1.login
+package com.adista.projectadvance1.login
 
 import android.content.Context
 import android.content.Intent

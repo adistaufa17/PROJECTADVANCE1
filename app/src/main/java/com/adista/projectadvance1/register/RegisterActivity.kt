@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityRegisterBinding
-import com.adista.projekadvance1.login.LoginActivity
+import com.adista.projectadvance1.login.LoginActivity
 import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.base.activity.CoreActivity
 import dagger.hilt.android.AndroidEntryPoint

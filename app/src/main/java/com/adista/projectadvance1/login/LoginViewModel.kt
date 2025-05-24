@@ -6,16 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adista.projectadvance1.core.network.ApiService
 import com.adista.projectadvance1.request.LoginRequest
-import com.crocodic.core.api.ApiObserver
-import com.crocodic.core.api.ApiResponse
-import com.crocodic.core.base.viewmodel.CoreViewModel
-import com.google.gson.Gson
-import dagger.Module
-import dagger.hilt.InstallIn
+import com.adista.projekadvance1.response.AuthResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +18,9 @@ class LoginViewModel @Inject constructor(
 
     val phone = MutableLiveData<String>()
     val password = MutableLiveData<String>()
+
+    private val _userToken = MutableLiveData<String>()
+    val userToken: LiveData<String> = _userToken
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -41,7 +37,14 @@ class LoginViewModel @Inject constructor(
             try {
                 val request = LoginRequest(phone, password)
                 val response = apiService.login(request)
-                _loginResult.value = true
+                if (response.code == 200 && response.status == "success" && response.data != null) {
+                    _userToken.value = response.data.token
+                    _loginResult.value = true
+                } else {
+                    _errorMessage.value = response.message
+                    _loginResult.value = false
+                }
+
             } catch (e: Exception) {
                 _errorMessage.value = e.message ?: "Login failed"
                 _loginResult.value = false

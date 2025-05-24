@@ -2,33 +2,24 @@ package com.adista.projekadvance1.response
 
 import com.google.gson.annotations.SerializedName
 
-sealed class AuthResponse {
-    data class Success(
-        val success: Boolean = true,
-        val message: String,
-        val data: UserData?
-    ) : AuthResponse()
+data class AuthResponse(
+    val code: Int,
+    val status: String,
+    val message: String,
+    val data: UserData?
+)
+data class RegisterResponse(
+    val code: Int,
+    val status: String,
+    val message: String,
+    val data: UserData
+)
 
-    data class Error(
-        val success: Boolean = false,
-        val message: String,
-        val errorCode: Int? = null
-    ) : AuthResponse()
-}
 
 data class UserData(
-    @SerializedName("id")
     val id: Int,
-
-    @SerializedName("name")
     val name: String,
-
-    @SerializedName("phone")
     val phone: String,
-
-    @SerializedName("school")
     val school: String?,
-
-    @SerializedName("photo")
-    val photo: String?
+    val token: String // jangan lupa token ya
 )

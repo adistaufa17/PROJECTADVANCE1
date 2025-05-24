@@ -41,15 +41,23 @@ class RegisterViewModel @Inject constructor(
             try {
                 val request = RegisterRequest(name, phone, school, password, passwordConfirmation)
                 val response = apiService.register(request)
-                _registerSuccess.value = true
+
+                if (response.code == 201 && response.status == "success") {
+                    _registerSuccess.value = true
+                } else {
+                    _errorMessage.value = response.message
+                    _registerSuccess.value = false
+                }
+
             } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "An error occurred"
+                _errorMessage.value = e.message ?: "Terjadi kesalahan jaringan"
                 _registerSuccess.value = false
             } finally {
                 _isLoading.value = false
             }
         }
     }
+
 
     fun onRegisterClick() {
         val nameValue = name.value.orEmpty()
