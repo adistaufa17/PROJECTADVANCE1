@@ -1,21 +1,24 @@
 package com.adista.projectadvance1.profil
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.databinding.DataBindingUtil
 import com.adista.projectadvance1.R
+import com.adista.projectadvance1.databinding.ActivityProfilBinding
+import com.adista.projectadvance1.profil.ProfilViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityProfilBinding
+    private val viewModel: ProfilViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_profil)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profil)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
     }
 }

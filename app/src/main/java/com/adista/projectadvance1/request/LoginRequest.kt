@@ -1,5 +1,4 @@
 package com.adista.projectadvance1.request
-
 import com.google.gson.annotations.SerializedName
 
 data class LoginRequest(

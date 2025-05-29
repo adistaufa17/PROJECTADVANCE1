@@ -1,22 +1,16 @@
 package com.adista.projectadvance1.register
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import android.widget.Toast.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityRegisterBinding
 import com.adista.projectadvance1.login.LoginActivity
-import com.crocodic.core.api.ApiStatus
-import com.crocodic.core.base.activity.CoreActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
@@ -75,4 +69,3 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 }
-

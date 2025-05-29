@@ -1,26 +1,21 @@
 package com.adista.projectadvance1.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.adista.projectadvance1.core.network.ApiService
 import com.adista.projectadvance1.request.LoginRequest
-import com.adista.projekadvance1.response.AuthResponse
+import com.crocodic.core.data.CoreSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val session: CoreSession
 ) : ViewModel() {
 
     val phone = MutableLiveData<String>()
     val password = MutableLiveData<String>()
-
-    private val _userToken = MutableLiveData<String>()
-    val userToken: LiveData<String> = _userToken
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -37,16 +32,27 @@ class LoginViewModel @Inject constructor(
             try {
                 val request = LoginRequest(phone, password)
                 val response = apiService.login(request)
-                if (response.code == 200 && response.status == "success" && response.data != null) {
-                    _userToken.value = response.data.token
-                    _loginResult.value = true
+
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null && body.code == 200 && body.status == "success" && body.data != null) {
+                        session.setValue("USER_NAME", body.data.name)
+                        session.setValue("USER_PHONE", body.data.phone)
+                        session.setValue("USER_SCHOOL", body.data.school ?: "")
+                        session.setValue("IS_LOGGED_IN", true)
+                        session.setValue("USER_TOKEN", body.data.token)
+
+                        _loginResult.value = true
+                    } else {
+                        _errorMessage.value = body?.message ?: "Login gagal"
+                        _loginResult.value = false
+                    }
                 } else {
-                    _errorMessage.value = response.message
+                    _errorMessage.value = "Login gagal: ${response.message()}"
                     _loginResult.value = false
                 }
-
             } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Login failed"
+                _errorMessage.value = e.message ?: "Login gagal, terjadi kesalahan"
                 _loginResult.value = false
             } finally {
                 _isLoading.value = false
@@ -57,6 +63,17 @@ class LoginViewModel @Inject constructor(
     fun onLoginClick() {
         val currentPhone = phone.value.orEmpty()
         val currentPassword = password.value.orEmpty()
+
+        if (currentPhone.isBlank() || currentPhone.length < 10 || !currentPhone.all { it.isDigit() }) {
+            _errorMessage.value = "Masukkan nomor HP yang valid"
+            return
+        }
+
+        if (currentPassword.isBlank()) {
+            _errorMessage.value = "Password tidak boleh kosong"
+            return
+        }
+
         login(currentPhone, currentPassword)
     }
 }

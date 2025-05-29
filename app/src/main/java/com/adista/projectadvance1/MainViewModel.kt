@@ -1,50 +1,77 @@
 package com.adista.projectadvance1
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.adista.projectadvance1.core.network.ApiService
+import com.adista.projectadvance1.model.FriendData
+import com.crocodic.core.data.CoreSession
+import com.crocodic.core.helper.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val session: CoreSession,
+    private val apiService: ApiService
+) : ViewModel() {
 
-    // Untuk search input di EditText
     val searchQuery = MutableLiveData<String>()
 
-    // Event navigasi ke daftar teman
-    private val _navigateToFriends = MutableLiveData<Unit>()
-    val navigateToFriends: LiveData<Unit> get() = _navigateToFriends
+    private val _userName = MutableLiveData<String>()
+    val userName: LiveData<String> = _userName
 
-    // Event navigasi ke profil
-    private val _navigateToProfile = MutableLiveData<Unit>()
-    val navigateToProfile: LiveData<Unit> get() = _navigateToProfile
+    private val _navigateToProfile = MutableLiveData<Boolean>()
+    val navigateToProfile: LiveData<Boolean> get() = _navigateToProfile
 
-    // Event logout
-    private val _logout = MutableLiveData<Unit>()
-    val logout: LiveData<Unit> get() = _logout
+    private val _friendList = MutableLiveData<List<FriendData>>()
+    val friendList: LiveData<List<FriendData>> = _friendList
 
-    // Event "See All"
-    private val _seeAllFriends = MutableLiveData<Unit>()
-    val seeAllFriends: LiveData<Unit> get() = _seeAllFriends
+    init {
+        _userName.value = session.getString("USER_NAME") ?: "Your Name"
+    }
 
-    // Dipanggil saat tombol "Friends" diklik
     fun onFriendsClick() {
-        _navigateToFriends.value = Unit
+        println("Friends clicked")
+        // Tambahkan intent kalau sudah siap
     }
 
-    // Dipanggil saat tombol "Profile" diklik
     fun onProfileClick() {
-        _navigateToProfile.value = Unit
+        _navigateToProfile.value = true
     }
 
-    // Dipanggil saat tombol "Logout" diklik
+    fun doneNavigating() {
+        _navigateToProfile.value = false
+    }
+
+    fun getFriends(context: Context) = viewModelScope.launch {
+        if (!NetworkHelper.isNetworkAvailable(context)) {
+            println("Tidak ada koneksi internet.")
+            return@launch
+        }
+
+        try {
+            val token = session.getString("TOKEN") ?: return@launch
+            val bearerToken = "Bearer $token"
+            val response = apiService.getFriends(bearerToken)
+            _friendList.postValue(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
     fun onLogoutClick() {
-        _logout.value = Unit
+        session.clearAll()
+        println("Logout clicked")
+        // Tambahkan intent ke LoginActivity kalau mau auto logout
     }
 
-    // Dipanggil saat tombol "See All" diklik
     fun onSeeAllClick() {
-        _seeAllFriends.value = Unit
+        println("See All clicked")
+        // Tambahkan logic navigasi jika sudah ada halaman FriendList
     }
 }

@@ -11,19 +11,28 @@ import androidx.databinding.DataBindingUtil
 import com.adista.projectadvance1.MainActivity
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityLoginBinding
-import com.adista.projectadvance1.login.LoginViewModel
 import com.adista.projectadvance1.register.RegisterActivity
+import com.crocodic.core.data.CoreSession
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
-
+class LoginActivity: AppCompatActivity() {
+    @Inject
+    lateinit var session: CoreSession
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (session.getBoolean("IS_LOGGED_IN")) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
+
+        setContentView(R.layout.activity_login)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
@@ -37,11 +46,8 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResult.observe(this) { success ->
             if (success) {
                 // Simpan session login
-                val prefs = getSharedPreferences("user_pref", Context.MODE_PRIVATE)
-                prefs.edit()
-                    .putBoolean("IS_LOGGED_IN", true)
-                    .putString("user_phone", viewModel.phone.value ?: "")
-                    .apply()
+                session.setValue("IS_LOGGED_IN", true)
+                session.setValue("USER_PHONE", viewModel.phone.value ?: "")
 
                 Toast.makeText(this, "Login berhasil!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, MainActivity::class.java))

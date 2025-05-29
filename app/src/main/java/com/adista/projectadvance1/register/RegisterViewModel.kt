@@ -1,24 +1,24 @@
 package com.adista.projectadvance1.register
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.adista.projectadvance1.core.network.ApiService
 import com.adista.projectadvance1.request.RegisterRequest
-import com.crocodic.core.api.ApiObserver
-import com.crocodic.core.api.ApiResponse
-import com.crocodic.core.base.viewmodel.CoreViewModel
-import com.google.gson.Gson
+import com.crocodic.core.data.CoreSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val session: CoreSession
 ) : ViewModel() {
+
+    val name = MutableLiveData<String>()
+    val phone = MutableLiveData<String>()
+    val school = MutableLiveData<String>()
+    val password = MutableLiveData<String>()
+    val confirmPassword = MutableLiveData<String>()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -29,12 +29,6 @@ class RegisterViewModel @Inject constructor(
     private val _registerSuccess = MutableLiveData<Boolean>()
     val registerSuccess: LiveData<Boolean> = _registerSuccess
 
-    val name = MutableLiveData<String>()
-    val phone = MutableLiveData<String>()
-    val school = MutableLiveData<String>()
-    val password = MutableLiveData<String>()
-    val confirmPassword = MutableLiveData<String>()
-
     fun register(name: String, phone: String, school: String, password: String, passwordConfirmation: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -42,15 +36,23 @@ class RegisterViewModel @Inject constructor(
                 val request = RegisterRequest(name, phone, school, password, passwordConfirmation)
                 val response = apiService.register(request)
 
-                if (response.code == 201 && response.status == "success") {
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    // Simpan ke session (gunakan data dari body jika perlu)
+                    session.setValue("USER_NAME", name)
+                    session.setValue("USER_PHONE", phone)
+                    session.setValue("USER_SCHOOL", school)
+                    session.setValue("IS_LOGGED_IN", true)
+
                     _registerSuccess.value = true
                 } else {
-                    _errorMessage.value = response.message
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.value = "Gagal register: ${errorBody ?: "Unknown error"}"
                     _registerSuccess.value = false
                 }
 
             } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Terjadi kesalahan jaringan"
+                _errorMessage.value = e.message ?: "Terjadi kesalahan"
                 _registerSuccess.value = false
             } finally {
                 _isLoading.value = false
