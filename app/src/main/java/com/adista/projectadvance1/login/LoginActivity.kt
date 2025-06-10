@@ -45,15 +45,21 @@ class LoginActivity: AppCompatActivity() {
     private fun setupObservers() {
         viewModel.loginResult.observe(this) { success ->
             if (success) {
-                // Simpan session login
                 session.setValue("IS_LOGGED_IN", true)
                 session.setValue("USER_PHONE", viewModel.phone.value ?: "")
+
+                // 🔥 Ambil token FCM & kirim ke server
+                com.google.firebase.messaging.FirebaseMessaging.getInstance().token
+                    .addOnSuccessListener { token ->
+                        viewModel.sendFcmTokenToServer(token)
+                    }
 
                 Toast.makeText(this, "Login berhasil!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
         }
+
 
         viewModel.errorMessage.observe(this) { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -62,6 +68,8 @@ class LoginActivity: AppCompatActivity() {
         viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
+
+
     }
 
     private fun setupClickListeners() {

@@ -24,14 +24,24 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(): Interceptor {
+    fun provideAuthInterceptor(session: CoreSession): Interceptor {
         return Interceptor { chain ->
+            val token = session.getString("USER_TOKEN") // Ambil token dari session
             val request = chain.request().newBuilder()
-                // Add any headers or authentication tokens if needed
-                .build()
-            chain.proceed(request)
+            if (!token.isNullOrEmpty()) {
+                request.addHeader("Authorization", "Bearer $token") // Tambahkan header Authorization
+            }
+            chain.proceed(request.build())
         }
     }
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY // Log semua request dan response
+        }
+    }
+
 
     @Provides
     @Singleton
@@ -59,11 +69,12 @@ object AppModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:8000/api/") // Replace with your actual base URL
+            .baseUrl("http://192.168.106.2:8000/api/") // Replace with your actual base URL
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
 
     @Provides
     @Singleton
@@ -76,13 +87,5 @@ object AppModule {
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("user_pref", Context.MODE_PRIVATE)
     }
-    @Provides
-        @Singleton
-        fun provideLoggingInterceptor(): HttpLoggingInterceptor {
-            return HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-        }
-
 
 }

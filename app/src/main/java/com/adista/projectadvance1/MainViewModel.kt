@@ -1,6 +1,7 @@
 package com.adista.projectadvance1
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,18 +49,32 @@ class MainViewModel @Inject constructor(
     }
 
     fun getFriends(context: Context) = viewModelScope.launch {
+        println("Fetching friends...")
+
         if (!NetworkHelper.isNetworkAvailable(context)) {
             println("Tidak ada koneksi internet.")
             return@launch
         }
 
         try {
-            val token = session.getString("TOKEN") ?: return@launch
+            val token = session.getString("USER_TOKEN")
+            if (token.isNullOrEmpty()) {
+                Log.e("FRIEND_API", "Token kosong!")
+                return@launch
+            }
             val bearerToken = "Bearer $token"
+            Log.d("FRIEND_API", "Token: $token")
             val response = apiService.getFriends(bearerToken)
-            _friendList.postValue(response)
+            Log.d("FRIEND_API", "Raw response: $response")
+            Log.d("FRIEND_API", "Response data: ${response.data}")
+
+            println("API Response: ${response}")
+            println("Friends data: ${response.data}")
+
+            _friendList.postValue(response.data)
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e("FRIEND_API", "Error getting friends", e)
         }
     }
 

@@ -76,4 +76,21 @@ class LoginViewModel @Inject constructor(
 
         login(currentPhone, currentPassword)
     }
+
+    fun sendFcmTokenToServer(fcmToken: String) = viewModelScope.launch {
+        try {
+            val token = session.getString("USER_TOKEN") ?: return@launch
+            val bearer = "Bearer $token"
+
+            val response = apiService.updateFcmToken(bearer, fcmToken)
+            if (response.isSuccessful) {
+                println("✅ FCM token berhasil dikirim ke server")
+            } else {
+                println("❌ Gagal kirim token: ${response.errorBody()?.string()}")
+            }
+        } catch (e: Exception) {
+            println("❌ Exception kirim FCM token: ${e.message}")
+        }
+    }
+
 }

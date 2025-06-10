@@ -1,9 +1,10 @@
 package com.adista.projectadvance1.core.network
 
 import com.adista.projectadvance1.model.AuthResponse
-import com.adista.projectadvance1.model.FriendData
+import com.adista.projectadvance1.model.FriendsResponse
 import com.adista.projectadvance1.request.LoginRequest
 import com.adista.projectadvance1.request.RegisterRequest
+import com.crocodic.core.api.ApiResponse
 import retrofit2.http.*
 import retrofit2.Response
 
@@ -16,9 +17,25 @@ interface ApiService {
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
 
     @GET("friends")
-    suspend fun getFriends(
-        @Header("Authorization") token: String
-    ): List<FriendData>
+    suspend fun getFriends(@Header("Authorization") token: String): FriendsResponse
+
+    @POST("poke/{friendId}")
+    suspend fun pokeFriend(
+        @Header("Authorization") token: String,
+        @Path("friendId") friendId: Int
+    ): retrofit2.Response<Unit>
+
+    @POST("update-fcm-token")
+    suspend fun updateFcmToken(
+        @Header("Authorization") token: String,
+        @Query("fcm_token") fcmToken: String
+    ): retrofit2.Response<ApiResponse>
+
+    @POST("save-fcm-token")
+    suspend fun saveFcmToken(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): Response<ApiResponse>
 
 }
 

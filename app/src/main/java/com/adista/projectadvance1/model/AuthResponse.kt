@@ -21,6 +21,15 @@ data class UserData(
 data class FriendData(
     val id: Int,
     val name: String,
-    val school: String,
-    val phone: String
+    val phone: String,
+    val school: String?,
+    val photo: String?,
+    val wa_link: String?
+)
+
+data class FriendsResponse(
+    val code: Int,
+    val status: String,
+    val message: String,
+    val data: List<FriendData>
 )
