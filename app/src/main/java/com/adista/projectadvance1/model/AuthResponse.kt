@@ -33,3 +33,12 @@ data class FriendsResponse(
     val message: String,
     val data: List<FriendData>
 )
+
+data class NotificationModel(
+    @SerializedName("id") val id: Int,
+    @SerializedName("title") val title: String,
+    @SerializedName("body") val body: String?,
+    @SerializedName("is_read") val isRead: Boolean,
+    @SerializedName("created_at") val createdAt: String
+)
+
