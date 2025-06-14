@@ -31,8 +31,17 @@ class MainViewModel @Inject constructor(
     private val _friendList = MutableLiveData<List<FriendData>>()
     val friendList: LiveData<List<FriendData>> = _friendList
 
+    private var originalList: List<FriendData> = emptyList()
+
+    private val _navigateToFriends = MutableLiveData<Boolean>()
+    val navigateToFriends: LiveData<Boolean> = _navigateToFriends
+
+    private val _userPhoto = MutableLiveData<String?>()
+    val userPhoto: LiveData<String?> = _userPhoto
+
     init {
         _userName.value = session.getString("USER_NAME") ?: "Your Name"
+        _userPhoto.value = session.getString("USER_PHOTO")
     }
 
     fun onFriendsClick() {
@@ -47,6 +56,11 @@ class MainViewModel @Inject constructor(
     fun doneNavigating() {
         _navigateToProfile.value = false
     }
+
+    fun doneNavigateToFriends() {
+        _navigateToFriends.postValue(false)
+    }
+
 
     fun getFriends(context: Context) = viewModelScope.launch {
         println("Fetching friends...")
@@ -76,8 +90,25 @@ class MainViewModel @Inject constructor(
             e.printStackTrace()
             Log.e("FRIEND_API", "Error getting friends", e)
         }
+
+        viewModelScope.launch {
+            try {
+                val token = session.getString("USER_TOKEN") ?: return@launch
+                val response = apiService.getFriends("Bearer $token")
+
+                originalList = response.data
+                _friendList.postValue(originalList)
+                _userName.postValue(session.getString("USER_NAME"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
+    fun refreshProfilePhoto() {
+        _userPhoto.postValue(session.getString("USER_PHOTO"))
+    }
 
     fun onLogoutClick() {
         session.clearAll()
@@ -87,6 +118,16 @@ class MainViewModel @Inject constructor(
 
     fun onSeeAllClick() {
         println("See All clicked")
-        // Tambahkan logic navigasi jika sudah ada halaman FriendList
+        _friendList.postValue(originalList)
+        searchQuery.value = ""
+        _navigateToFriends.postValue(true)
+    }
+
+
+    fun onSearchQueryChanged(query: String) {
+        val filtered = originalList.filter {
+            it.name.contains(query, ignoreCase = true)
+        }
+        _friendList.postValue(filtered)
     }
 }

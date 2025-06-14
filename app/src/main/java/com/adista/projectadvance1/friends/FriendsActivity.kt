@@ -1,21 +1,44 @@
 package com.adista.projectadvance1.friends
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.adista.projectadvance1.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.adista.projectadvance1.MainViewModel
+import com.adista.projectadvance1.databinding.ActivityFriendsBinding
+import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FriendsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityFriendsBinding
+    private val viewModel: MainViewModel by viewModels()
+    private lateinit var adapter: FriendAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_friends)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        binding = ActivityFriendsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        adapter = FriendAdapter(emptyList()) { selectedFriend ->
+            val intent = Intent(this, FriendDetailActivity::class.java)
+            intent.putExtra("FRIEND_DATA", Gson().toJson(selectedFriend))
+            startActivity(intent)
+        }
+
+        binding.rvFriends.layoutManager = LinearLayoutManager(this)
+        binding.rvFriends.adapter = adapter
+
+        viewModel.friendList.observe(this) {
+            adapter.updateData(it)
+        }
+
+        viewModel.getFriends(this)
+
+        binding.btnBack.setOnClickListener {
+            finish()
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.adista.projectadvance1.core.network
 
 import com.adista.projectadvance1.model.AuthResponse
+import com.adista.projectadvance1.model.EditProfileResponse
 import com.adista.projectadvance1.model.FriendsResponse
 import com.adista.projectadvance1.request.LoginRequest
 import com.adista.projectadvance1.request.RegisterRequest
@@ -37,6 +38,21 @@ interface ApiService {
         @Body body: Map<String, String>
     ): Response<ApiResponse>
 
+    @GET("notifications")
+    suspend fun getNotifications(@Header("Authorization") token: String): Response<ApiResponse>
+
+    @POST("edit-profile")
+    @Headers("Content-Type: application/json")
+    suspend fun editProfile(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): Response<EditProfileResponse> // Hapus ApiResponse wrapper
+
+
+    @POST("edit-password")
+    suspend fun changePassword(
+        @Body body: Map<String, String>
+    ): retrofit2.Response<ApiResponse>
 
 }
 

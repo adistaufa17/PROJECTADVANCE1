@@ -21,6 +21,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Binding layout dengan ViewModel
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -29,11 +30,18 @@ class RegisterActivity : AppCompatActivity() {
         setupClickListeners()
     }
 
+    // Observer untuk memantau hasil register
     private fun setupObservers() {
         viewModel.registerSuccess.observe(this) { success ->
             if (success) {
                 Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, LoginActivity::class.java))
+
+                // Intent ke LoginActivity sambil mengirim nomor HP dan password
+                val intent = Intent(this, LoginActivity::class.java).apply {
+                    putExtra("PHONE", viewModel.phone.value)
+                    putExtra("PASSWORD", viewModel.password.value)
+                }
+                startActivity(intent)
                 finish()
             }
         }
@@ -47,6 +55,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    // Listener tombol register dan pindah ke login
     private fun setupClickListeners() {
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -65,6 +74,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Kirim data ke ViewModel untuk proses register
             viewModel.register(name, phone, school, password, confirmPassword)
         }
     }

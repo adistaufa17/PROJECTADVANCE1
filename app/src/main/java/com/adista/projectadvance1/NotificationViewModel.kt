@@ -32,8 +32,14 @@ class NotificationViewModel @Inject constructor(
             val token = session.getString("USER_TOKEN") ?: return@launch
             val bearer = "Bearer $token"
             val response = apiService.getNotifications(bearer)
+
             if (response.isSuccessful) {
-                notifications.postValue(response.body()?.data ?: emptyList())
+                val dataArray = response.body()?.data as? List<*>
+                val notifList = dataArray?.mapNotNull {
+                    Gson().fromJson(Gson().toJson(it), NotificationModel::class.java)
+                } ?: emptyList()
+
+                notifications.postValue(notifList)
             } else {
                 Log.e("NOTIF", "Gagal: ${response.code()}")
             }
@@ -41,4 +47,5 @@ class NotificationViewModel @Inject constructor(
             Log.e("NOTIF", "Exception: ${e.message}")
         }
     }
+
 }

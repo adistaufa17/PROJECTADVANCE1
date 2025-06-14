@@ -91,11 +91,12 @@
                     android:id="@+id/iv_profile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
                     android:background="#D9D9D9"
                     android:contentDescription="Profile picture"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_person"
-                    app:tint="#8C8C8C" />
+                    android:src="@drawable/ic_person" />
+
 
             </androidx.cardview.widget.CardView>
 
@@ -129,8 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 app:cardBackgroundColor="@color/greyblue"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

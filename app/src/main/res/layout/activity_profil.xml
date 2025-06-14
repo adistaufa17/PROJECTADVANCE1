@@ -72,7 +72,6 @@
                 android:layout_height="32dp"
                 android:background="@drawable/circle_background"
                 android:contentDescription="Edit profile"
-                android:onClick="@{() -> viewModel.onEditClick()}"
                 android:padding="6dp"
                 android:src="@drawable/ic_edit"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -120,12 +119,9 @@
                         android:id="@+id/iv_profile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#D9D9D9"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_person"
-                        app:tint="#8C8C8C"
+                        android:scaleType="centerCrop"
+                        app:imageUrl="@{viewModel.photoUrl}"
                         android:contentDescription="Profile picture" />
-
 
                 </androidx.cardview.widget.CardView>
 
@@ -205,10 +201,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:onClick="@{() -> viewModel.onChangePasswordClick()}"
                 app:cardBackgroundColor="@color/greyblue"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="8dp">
 
                 <TextView
                     android:layout_width="match_parent"

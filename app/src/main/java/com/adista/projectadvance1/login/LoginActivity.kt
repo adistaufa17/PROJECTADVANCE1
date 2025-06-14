@@ -26,6 +26,11 @@ class LoginActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val phone = intent.getStringExtra("PHONE")
+        val password = intent.getStringExtra("PASSWORD")
+        viewModel.phone.value = phone
+        viewModel.password.value = password
+
         if (session.getBoolean("IS_LOGGED_IN")) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -33,6 +38,16 @@ class LoginActivity: AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_login)
+
+        val phoneFromRegister = intent.getStringExtra("PHONE")
+        val passFromRegister = intent.getStringExtra("PASSWORD")
+
+        if (!phoneFromRegister.isNullOrEmpty()) {
+            viewModel.phone.value = phoneFromRegister
+        }
+        if (!passFromRegister.isNullOrEmpty()) {
+            viewModel.password.value = passFromRegister
+        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this

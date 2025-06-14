@@ -84,12 +84,12 @@ class LoginViewModel @Inject constructor(
 
             val response = apiService.updateFcmToken(bearer, fcmToken)
             if (response.isSuccessful) {
-                println("✅ FCM token berhasil dikirim ke server")
+                println("FCM token berhasil dikirim ke server")
             } else {
-                println("❌ Gagal kirim token: ${response.errorBody()?.string()}")
+                println("Gagal kirim token: ${response.errorBody()?.string()}")
             }
         } catch (e: Exception) {
-            println("❌ Exception kirim FCM token: ${e.message}")
+            println("Exception kirim FCM token: ${e.message}")
         }
     }
 

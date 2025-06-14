@@ -22,8 +22,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        val title = remoteMessage.notification?.title ?: "Notifikasi"
-        val body = remoteMessage.notification?.body ?: ""
+        val title = remoteMessage.notification?.title ?: remoteMessage.data["title"] ?: "Notifikasi"
+        val body = remoteMessage.notification?.body ?: remoteMessage.data["body"] ?: "Ada pesan baru"
         val channelId = "poke_channel"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -41,10 +41,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentTitle(title)
             .setContentText(body)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
 
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(0, builder.build())
+        manager.notify(System.currentTimeMillis().toInt(), builder.build())
     }
+
+
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)

@@ -1,6 +1,8 @@
 package com.adista.projectadvance1.friends
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,15 +36,29 @@ class FriendDetailViewModel @Inject constructor(
     }
 
     fun onBackClick() {
-        // Kembali bisa ditangani langsung di activity jika ingin
     }
 
     fun onWhatsappClick() {
-        // Sudah ditangani di activity, jadi kosongkan atau logika tambahan jika dibutuhkan
     }
 
-    fun onPokeClick() {
+    fun openWhatsapp(context: Context, rawPhone: String?) {
+        val phone = rawPhone
+            ?.replace(" ", "")
+            ?.replace("-", "")
+            ?.replace("+", "")
+            ?.replace("^0", "62")
+            ?: return Toast.makeText(context, "Nomor tidak tersedia", Toast.LENGTH_SHORT).show()
+
+        try {
+            val uri = Uri.parse("https://wa.me/$phone")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.setPackage("com.whatsapp")
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "Tidak dapat membuka WhatsApp. Pastikan nomor aktif atau WhatsApp terpasang.", Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     fun pokeFriend(friendId: Int, context: Context) = viewModelScope.launch {
         try {

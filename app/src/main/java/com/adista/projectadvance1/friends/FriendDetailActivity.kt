@@ -3,6 +3,7 @@ package com.adista.projectadvance1.friends
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -41,16 +42,14 @@ class FriendDetailActivity : AppCompatActivity() {
             viewModel.pokeFriend(friend.id, this)
         }
 
-        binding.btnWhatsapp.setOnClickListener {
-            friend.wa_link?.let {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
-                startActivity(intent)
-            } ?: Toast.makeText(this, "Link WhatsApp tidak tersedia", Toast.LENGTH_SHORT).show()
-        }
-
         binding.btnBack.setOnClickListener {
             finish()
         }
+
+        binding.btnWhatsapp.setOnClickListener {
+            viewModel.openWhatsapp(this, friend.phone)
+        }
+
     }
 
     private fun bindFriendData() {
@@ -61,6 +60,8 @@ class FriendDetailActivity : AppCompatActivity() {
                 .load(friend.photo)
                 .centerCrop()
                 .into(binding.ivProfile)
+            Log.d("PHOTO_URL", "Friend photo URL: ${friend.photo}")
+
         } else {
             binding.ivProfile.setImageResource(R.drawable.ic_person)
         }

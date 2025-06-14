@@ -42,3 +42,15 @@ data class NotificationModel(
     @SerializedName("created_at") val createdAt: String
 )
 
+data class EditProfileResponse(
+    val code: Int,
+    val status: String,
+    val message: String,
+    val data: ProfileData
+)
+
+data class ProfileData(
+    val name: String,
+    val school: String?,
+    val photo: String?
+)
