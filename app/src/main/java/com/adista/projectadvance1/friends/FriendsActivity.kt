@@ -2,6 +2,7 @@ package com.adista.projectadvance1.friends
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +37,18 @@ class FriendsActivity : AppCompatActivity() {
         }
 
         viewModel.getFriends(this)
+
+        viewModel.searchQuery.observe(this) { query ->
+            viewModel.onSearchQueryChanged(query)
+        }
+
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val query = binding.etSearch.text.toString().trim()
+                viewModel.onSearchQueryChanged(query)
+                true
+            } else false
+        }
 
         binding.btnBack.setOnClickListener {
             finish()

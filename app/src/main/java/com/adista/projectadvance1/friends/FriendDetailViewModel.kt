@@ -35,34 +35,40 @@ class FriendDetailViewModel @Inject constructor(
         _school.value = school ?: "-"
     }
 
+
     fun onBackClick() {
     }
 
-    fun onWhatsappClick() {
-    }
-
     fun openWhatsapp(context: Context, rawPhone: String?) {
-        val phone = rawPhone
-            ?.replace(" ", "")
-            ?.replace("-", "")
-            ?.replace("+", "")
-            ?.replace("^0", "62")
-            ?: return Toast.makeText(context, "Nomor tidak tersedia", Toast.LENGTH_SHORT).show()
+        if (rawPhone.isNullOrBlank()) {
+            Toast.makeText(context, "Nomor tidak tersedia", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val formatted = rawPhone
+            .replace("\\D".toRegex(), "")  // hapus semua karakter non-angka
+            .replaceFirst("^0".toRegex(), "62")  // ganti awalan 0 jadi 62
+
+        val text = Uri.encode("Hai, saya dari aplikasi ProjectAdvance1")
+        val uri = Uri.parse("https://wa.me/$formatted?text=$text")
 
         try {
-            val uri = Uri.parse("https://wa.me/$phone")
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.setPackage("com.whatsapp")
             context.startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(context, "Tidak dapat membuka WhatsApp. Pastikan nomor aktif atau WhatsApp terpasang.", Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
+            Toast.makeText(
+                context,
+                "Gagal membuka WhatsApp. Pastikan aplikasi tersedia atau coba lewat browser.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-    }
 
+    }
 
     fun pokeFriend(friendId: Int, context: Context) = viewModelScope.launch {
         try {
-            val token = session.getString("USER_TOKEN") ?: return@launch
+            val token = session.getString("USER_TOKEN")
             val bearer = "Bearer $token"
             val response = apiService.pokeFriend(bearer, friendId)
             if (response.isSuccessful) {
@@ -74,4 +80,5 @@ class FriendDetailViewModel @Inject constructor(
             Toast.makeText(context, "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

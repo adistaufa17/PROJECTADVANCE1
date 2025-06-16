@@ -44,7 +44,7 @@ class NotificationActivity : AppCompatActivity() {
 
         val request = object : JsonObjectRequest(
             Request.Method.GET,
-            "http://192.168.139.2:8000/api/notifications",
+            "http://192.168.1.6:8000/api/notifications",
             null,
             { response ->
                 val jsonArray = response.getJSONArray("data")

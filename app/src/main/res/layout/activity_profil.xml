@@ -120,6 +120,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
+                        android:background="#6E7096"
+                        android:src="@drawable/ic_person"
                         app:imageUrl="@{viewModel.photoUrl}"
                         android:contentDescription="Profile picture" />
 

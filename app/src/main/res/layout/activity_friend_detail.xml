@@ -257,7 +257,6 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:onClick="@{() -> viewModel.onWhatsappClick()}"
                     app:cardBackgroundColor="#25D366"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">

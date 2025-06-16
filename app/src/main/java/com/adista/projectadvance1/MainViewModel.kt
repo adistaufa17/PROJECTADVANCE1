@@ -63,8 +63,6 @@ class MainViewModel @Inject constructor(
 
 
     fun getFriends(context: Context) = viewModelScope.launch {
-        println("Fetching friends...")
-
         if (!NetworkHelper.isNetworkAvailable(context)) {
             println("Tidak ada koneksi internet.")
             return@launch
@@ -76,33 +74,37 @@ class MainViewModel @Inject constructor(
                 Log.e("FRIEND_API", "Token kosong!")
                 return@launch
             }
+
             val bearerToken = "Bearer $token"
-            Log.d("FRIEND_API", "Token: $token")
             val response = apiService.getFriends(bearerToken)
-            Log.d("FRIEND_API", "Raw response: $response")
-            Log.d("FRIEND_API", "Response data: ${response.data}")
 
-            println("API Response: ${response}")
-            println("Friends data: ${response.data}")
+            if (response.data.isNotEmpty()) {
+                originalList = response.data
+                _friendList.postValue(originalList) // Batasi jika perlu
+                _userName.postValue(session.getString("USER_NAME"))
+            } else {
+                Log.w("FRIEND_API", "Data teman kosong dari server")
+            }
 
-            _friendList.postValue(response.data)
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("FRIEND_API", "Error getting friends", e)
+            Log.e("FRIEND_API", "Error saat mengambil data teman", e)
         }
+    }
 
-        viewModelScope.launch {
-            try {
-                val token = session.getString("USER_TOKEN") ?: return@launch
-                val response = apiService.getFriends("Bearer $token")
+    fun updateFcmToken(token: String) = viewModelScope.launch {
+        try {
+            val auth = session.getString("USER_TOKEN") ?: return@launch
+            val bearer = "Bearer $auth"
+            val response = apiService.updateFcmToken(bearer, token)
 
-                originalList = response.data
-                _friendList.postValue(originalList)
-                _userName.postValue(session.getString("USER_NAME"))
-
-            } catch (e: Exception) {
-                e.printStackTrace()
+            if (response.isSuccessful) {
+                Log.d("FCM", "Token berhasil dikirim")
+            } else {
+                Log.e("FCM", "Gagal kirim token: ${response.code()}")
             }
+        } catch (e: Exception) {
+            Log.e("FCM", "Error: ${e.message}")
         }
     }
 

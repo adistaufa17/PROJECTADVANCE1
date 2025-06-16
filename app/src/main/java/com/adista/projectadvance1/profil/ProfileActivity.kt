@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import com.adista.projectadvance1.ImageUtil
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityProfilBinding
 import com.bumptech.glide.Glide
@@ -60,14 +61,13 @@ class ProfileActivity : AppCompatActivity() {
             pickImageLauncher.launch("image/*")
         }
 
-        val photoUrl = viewModel.photoUrl.value
-        if (!photoUrl.isNullOrBlank()) {
+        viewModel.photoUrl.observe(this) { path ->
+            val imageUrl = ImageUtil.getFullImageUrl(path)
             Glide.with(this)
-                .load(photoUrl)
+                .load(imageUrl)
                 .transform(CircleCrop())
                 .into(binding.ivProfile)
         }
-
 
     }
 

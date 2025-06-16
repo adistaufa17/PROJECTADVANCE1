@@ -21,8 +21,6 @@ import com.adista.projectadvance1.login.LoginActivity
 import com.adista.projectadvance1.profil.ProfileActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.crocodic.core.data.CoreSession
 import com.google.firebase.messaging.FirebaseMessaging
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         val userId = getUserIdFromPrefs() // Ambil ID user dari SharedPreferences atau session login
 
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-            sendTokenToServer(token)
+            viewModel.updateFcmToken(token)
         }
 
         // Cek permission notifikasi untuk Android 13+
@@ -143,15 +141,12 @@ class MainActivity : AppCompatActivity() {
             } else false
         }
 
-        viewModel.userPhoto.observe(this) { photoUrl ->
-            if (!photoUrl.isNullOrEmpty()) {
-                Glide.with(this)
-                    .load(photoUrl)
-                    .centerCrop()
-                    .into(binding.ivUserAvatar)
-            } else {
-                binding.ivUserAvatar.setImageResource(R.drawable.ic_person)
-            }
+        viewModel.userPhoto.observe(this) { photoPath ->
+            val imageUrl = ImageUtil.getFullImageUrl(photoPath)
+            Glide.with(this)
+                .load(imageUrl)
+                .circleCrop()
+                .into(binding.ivUserAvatar)
         }
 
     }
@@ -170,32 +165,6 @@ class MainActivity : AppCompatActivity() {
     private fun goToProfile() {
         startActivity(Intent(this, ProfileActivity::class.java))
     }
-
-    private fun sendTokenToServer(token: String) {
-        val queue = Volley.newRequestQueue(this)
-        val url = "http://192.168.139.2:8000/api/update-fcm-token"
-
-        val request = object : StringRequest(Method.POST, url,
-            { response ->
-                Log.d("FCM", "Token berhasil dikirim ke server")
-            },
-            { error ->
-                Log.e("FCM", "Gagal kirim token: ${error.message}")
-            }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = mutableMapOf<String, String>()
-                headers["Authorization"] = "Bearer ${session.getString("USER_TOKEN")}"
-                return headers
-            }
-
-            override fun getParams(): MutableMap<String, String> {
-                return mutableMapOf("fcm_token" to token)
-            }
-        }
-
-        queue.add(request)
-    }
-
 
     private fun getUserIdFromPrefs(): Int {
         return session.getInt("USER_ID") ?: 0

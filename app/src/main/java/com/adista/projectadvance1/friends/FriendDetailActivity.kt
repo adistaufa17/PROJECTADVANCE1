@@ -1,18 +1,17 @@
 package com.adista.projectadvance1.friends
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.adista.projectadvance1.ImageUtil
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityFriendDetailBinding
 import com.adista.projectadvance1.model.FriendData
-import com.google.gson.Gson
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,12 +28,20 @@ class FriendDetailActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        // Ambil data dari intent
         val json = intent.getStringExtra("FRIEND_DATA")
-        if (json != null) {
-            friend = Gson().fromJson(json, FriendData::class.java)
-            bindFriendData()
-        } else {
+        if (json.isNullOrBlank()) {
             Toast.makeText(this, "Data teman tidak ditemukan", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        friend = Gson().fromJson(json, FriendData::class.java)
+
+        // Isi data ke ViewModel dan tampilkan di UI
+        bindFriendData()
+
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
@@ -42,28 +49,27 @@ class FriendDetailActivity : AppCompatActivity() {
             viewModel.pokeFriend(friend.id, this)
         }
 
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
         binding.btnWhatsapp.setOnClickListener {
+            Log.d("WHATSAPP", "Tombol WhatsApp diklik: ${friend.phone}")
             viewModel.openWhatsapp(this, friend.phone)
         }
-
     }
 
     private fun bindFriendData() {
         viewModel.setFriendData(friend.name, friend.phone, friend.school)
 
-        if (!friend.photo.isNullOrBlank()) {
-            Glide.with(this)
-                .load(friend.photo)
-                .centerCrop()
-                .into(binding.ivProfile)
-            Log.d("PHOTO_URL", "Friend photo URL: ${friend.photo}")
+        val imageUrl = ImageUtil.getFullImageUrl(friend.photo)
 
-        } else {
-            binding.ivProfile.setImageResource(R.drawable.ic_person)
+        if (imageUrl != null) {
+            if (imageUrl.isNotBlank()) {
+                Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(binding.ivProfile)
+                Log.d("PHOTO_URL", "Friend photo URL: $imageUrl")
+            } else {
+                binding.ivProfile.setImageResource(R.drawable.ic_person)
+            }
         }
     }
 }
