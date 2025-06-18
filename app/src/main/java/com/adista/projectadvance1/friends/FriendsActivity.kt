@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.adista.projectadvance1.MainViewModel
+import com.adista.projectadvance1.main.MainViewModel
 import com.adista.projectadvance1.databinding.ActivityFriendsBinding
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint

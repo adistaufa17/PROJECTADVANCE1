@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.adista.projectadvance1.MainViewModel" />
+            type="com.adista.projectadvance1.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,15 +28,15 @@
         <!-- Judul -->
         <TextView
             android:id="@+id/tv_title"
+            style="@style/TitleActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
             android:text="All Friends"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            app:layout_constraintStart_toEndOf="@id/btn_back"
+            android:textColor="@color/blueblack"
             app:layout_constraintBottom_toBottomOf="@id/btn_back"
-            android:layout_marginStart="12dp" />
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Search Bar -->
         <androidx.cardview.widget.CardView

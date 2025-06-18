@@ -38,11 +38,6 @@ interface ApiService {
         @Query("fcm_token") fcmToken: String
     ): Response<ApiResponse>
 
-    @GET("notifications")
-    suspend fun getNotifications(
-        @Header("Authorization") token: String
-    ): Response<ApiResponse>
-
     @POST("edit-profile")
     @Headers("Content-Type: application/json")
     suspend fun editProfile(

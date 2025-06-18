@@ -74,6 +74,11 @@ class LoginViewModel @Inject constructor(
             return
         }
 
+        if (currentPassword.length < 8) {
+            _errorMessage.value = "Password minimal 8 karakter"
+            return
+        }
+
         login(currentPhone, currentPassword)
     }
 

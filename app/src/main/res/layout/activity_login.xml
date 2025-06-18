@@ -90,7 +90,7 @@
 
             <!-- Phone Number Input -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_phone"
+                android:id="@+id/phoneInputLayout"
                 style="@style/TextField"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_phone"
+                    android:id="@+id/etPhone"
                     style="@style/TextFieldInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
 
             <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_password"
+                android:id="@+id/passwordInputLayout"
                 style="@style/TextField"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -121,16 +121,16 @@
                 android:hint="Password"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_phone">
+                app:layout_constraintTop_toBottomOf="@id/phoneInputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_password"
+                    android:id="@+id/etPassword"
                     style="@style/TextFieldInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:text="@={viewModel.password}"/>
-                </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <!-- Login Button -->
@@ -143,7 +143,7 @@
                 android:text="Login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_password" />
+                app:layout_constraintTop_toBottomOf="@id/passwordInputLayout" />
 
             <!-- Register Link -->
             <TextView

@@ -1,4 +1,4 @@
-package com.adista.projectadvance1
+package com.adista.projectadvance1.main
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,20 +13,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityMainBinding
 import com.adista.projectadvance1.friends.FriendAdapter
 import com.adista.projectadvance1.friends.FriendDetailActivity
 import com.adista.projectadvance1.friends.FriendsActivity
 import com.adista.projectadvance1.login.LoginActivity
 import com.adista.projectadvance1.profil.ProfileActivity
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.adista.projectadvance1.util.ImageUtil
 import com.bumptech.glide.Glide
 import com.crocodic.core.data.CoreSession
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -84,10 +83,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.ivUserAvatar.setOnClickListener { goToProfile() }
         binding.tvUserName.setOnClickListener { goToProfile() }
-
-        binding.ivNotification.setOnClickListener {
-            startActivity(Intent(this, NotificationActivity::class.java))
-        }
 
         binding.btnLogout.setOnClickListener {
             AlertDialog.Builder(this)

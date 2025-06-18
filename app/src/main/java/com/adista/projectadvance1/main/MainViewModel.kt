@@ -1,4 +1,4 @@
-package com.adista.projectadvance1
+package com.adista.projectadvance1.main
 
 import android.content.Context
 import android.util.Log

@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.adista.projectadvance1.ImageUtil
+import com.adista.projectadvance1.util.ImageUtil
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityFriendDetailBinding
 import com.adista.projectadvance1.model.FriendData

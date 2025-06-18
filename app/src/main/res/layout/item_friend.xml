@@ -20,16 +20,19 @@
             android:padding="12dp">
 
             <!-- Profile Picture -->
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_profile"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/_46sdp"
+                android:layout_height="@dimen/_46sdp"
                 android:scaleType="centerCrop"
+                android:src="@drawable/ic_person"
+                android:contentDescription="Profile picture"
+                android:padding="@dimen/_4sdp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_person"
-                android:contentDescription="Profile picture" />
+                app:shapeAppearanceOverlay="@style/RoundedCornerImageView" />
+
 
             <!-- Friend Info -->
             <LinearLayout
@@ -51,8 +54,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:contentDescription="Person Icon"
                         android:src="@drawable/ic_person"
                         app:tint="@color/navy" />
@@ -63,7 +66,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:textColor="@color/navy"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/_14ssp"
                         android:textStyle="bold"
                         tools:text="Adista Nurul Fadilah" />
                 </LinearLayout>
@@ -77,8 +80,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:contentDescription="School Icon"
                         android:src="@drawable/ic_school"
                         app:tint="@color/navy" />
@@ -89,8 +92,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:textColor="@color/navy"
-                        android:textSize="12sp"
-                        tools:text="SMAN 1 PURWOKERTO" />
+                        android:textSize="@dimen/_12ssp"
+                        tools:text="SMKN 1 PURWOKERTO" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

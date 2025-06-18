@@ -1,14 +1,14 @@
 package com.adista.projectadvance1.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
-import com.adista.projectadvance1.MainActivity
+import com.adista.projectadvance1.main.MainActivity
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityLoginBinding
 import com.adista.projectadvance1.register.RegisterActivity
@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginActivity: AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var session: CoreSession
     private lateinit var binding: ActivityLoginBinding
@@ -55,6 +55,7 @@ class LoginActivity: AppCompatActivity() {
 
         setupObservers()
         setupClickListeners()
+        setupTextWatchers()
     }
 
     private fun setupObservers() {
@@ -63,7 +64,7 @@ class LoginActivity: AppCompatActivity() {
                 session.setValue("IS_LOGGED_IN", true)
                 session.setValue("USER_PHONE", viewModel.phone.value ?: "")
 
-                // 🔥 Ambil token FCM & kirim ke server
+                // 🔥 Kirim FCM token
                 com.google.firebase.messaging.FirebaseMessaging.getInstance().token
                     .addOnSuccessListener { token ->
                         viewModel.sendFcmTokenToServer(token)
@@ -75,16 +76,29 @@ class LoginActivity: AppCompatActivity() {
             }
         }
 
-
         viewModel.errorMessage.observe(this) { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+            // Tampilkan error merah di input sesuai isi pesan
+            when {
+                message.contains("nomor", true) -> {
+                    binding.phoneInputLayout.error = message
+                    binding.passwordInputLayout.error = null
+                }
+                message.contains("password", true) -> {
+                    binding.passwordInputLayout.error = message
+                    binding.phoneInputLayout.error = null
+                }
+                else -> {
+                    binding.phoneInputLayout.error = null
+                    binding.passwordInputLayout.error = null
+                }
+            }
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
-
-
     }
 
     private fun setupClickListeners() {
@@ -93,5 +107,13 @@ class LoginActivity: AppCompatActivity() {
         }
     }
 
+    private fun setupTextWatchers() {
+        binding.etPhone.doOnTextChanged { _, _, _, _ ->
+            binding.phoneInputLayout.error = null
+        }
 
+        binding.etPassword.doOnTextChanged { _, _, _, _ ->
+            binding.passwordInputLayout.error = null
+        }
+    }
 }
