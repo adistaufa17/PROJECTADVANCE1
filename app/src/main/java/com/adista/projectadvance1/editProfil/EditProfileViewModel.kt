@@ -40,7 +40,7 @@ class EditProfileViewModel @Inject constructor(
                     body["photo"] = photoBase64
                 }
 
-                val response = apiService.editProfile("Bearer $token", body)
+                val response = apiService.editProfile(body)
 
                 if (response.isSuccessful) {
                     val result = response.body()

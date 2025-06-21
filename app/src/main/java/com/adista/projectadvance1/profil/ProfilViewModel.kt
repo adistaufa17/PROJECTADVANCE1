@@ -32,6 +32,7 @@ class ProfilViewModel @Inject constructor(
         photoUrl.value = session.getString("USER_PHOTO")
     }
 
+
     fun onLogoutClick() {
         session.clearAll()
     }

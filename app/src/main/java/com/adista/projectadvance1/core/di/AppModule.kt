@@ -2,6 +2,7 @@ package com.adista.projectadvance1.core.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.adista.projectadvance1.Constants
 import com.adista.projectadvance1.core.network.ApiService
 import com.crocodic.core.data.CoreSession
 import com.crocodic.core.helper.NetworkHelper
@@ -26,14 +27,15 @@ object AppModule {
     @Singleton
     fun provideAuthInterceptor(session: CoreSession): Interceptor {
         return Interceptor { chain ->
-            val token = session.getString("USER_TOKEN") // Ambil token dari session
+            val token = session.getString("USER_TOKEN")
             val request = chain.request().newBuilder()
             if (!token.isNullOrEmpty()) {
-                request.addHeader("Authorization", "Bearer $token") // Tambahkan header Authorization
+                request.addHeader("Authorization", "Bearer $token")
             }
             chain.proceed(request.build())
         }
     }
+
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -49,7 +51,7 @@ object AppModule {
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
+            .addInterceptor(authInterceptor) // Token disisipkan di sini
             .addInterceptor(loggingInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
@@ -68,7 +70,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.139.2:8000/api/")
+            .baseUrl(Constants.BASE_API_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

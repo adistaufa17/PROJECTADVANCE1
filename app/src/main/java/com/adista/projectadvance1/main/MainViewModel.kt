@@ -69,18 +69,11 @@ class MainViewModel @Inject constructor(
         }
 
         try {
-            val token = session.getString("USER_TOKEN")
-            if (token.isNullOrEmpty()) {
-                Log.e("FRIEND_API", "Token kosong!")
-                return@launch
-            }
-
-            val bearerToken = "Bearer $token"
-            val response = apiService.getFriends(bearerToken)
+            val response = apiService.getFriends()
 
             if (response.data.isNotEmpty()) {
                 originalList = response.data
-                _friendList.postValue(originalList) // Batasi jika perlu
+                _friendList.postValue(originalList)
                 _userName.postValue(session.getString("USER_NAME"))
             } else {
                 Log.w("FRIEND_API", "Data teman kosong dari server")
@@ -92,11 +85,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
     fun updateFcmToken(token: String) = viewModelScope.launch {
         try {
-            val auth = session.getString("USER_TOKEN") ?: return@launch
-            val bearer = "Bearer $auth"
-            val response = apiService.updateFcmToken(bearer, token)
+            val response = apiService.updateFcmToken(token)
 
             if (response.isSuccessful) {
                 Log.d("FCM", "Token berhasil dikirim")
@@ -110,6 +102,12 @@ class MainViewModel @Inject constructor(
 
     fun refreshProfilePhoto() {
         _userPhoto.postValue(session.getString("USER_PHOTO"))
+    }
+
+    fun refreshAllData(context: Context) {
+        getFriends(context) // ambil ulang list teman
+        _userName.postValue(session.getString("USER_NAME")) // refresh nama dari session
+        _userPhoto.postValue(session.getString("USER_PHOTO")) // refresh foto dari session
     }
 
     fun onLogoutClick() {

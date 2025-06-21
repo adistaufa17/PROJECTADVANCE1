@@ -3,6 +3,8 @@ package com.adista.projectadvance1.register
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,13 @@ class RegisterActivity : AppCompatActivity() {
         setupObservers()
         setupClickListeners()
         setupValidation() //  Validasi real-time
+        setupSchoolDropdown()
+
+        binding.etSchool.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                (view as? AutoCompleteTextView)?.showDropDown()
+            }
+        }
     }
 
     private fun setupObservers() {
@@ -111,6 +120,24 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 binding.tilConfirmPassword.error = null
             }
+        }
+    }
+
+    private fun setupSchoolDropdown() {
+        val sekolahList = listOf(
+            "SMK PALAPA SEMARANG",
+            "SMKN 1 PURWOKERTO",
+            "SMK 3 KENDAL",
+            "SMK 10 SEMARANG",
+            "SMK 11 SEMARANG",
+            "SMKN 2 PURWOKERTO"
+        )
+
+        val adapter = ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, sekolahList)
+        binding.etSchool.setAdapter(adapter)
+
+        binding.etSchool.setOnClickListener {
+            binding.etSchool.showDropDown()
         }
     }
 }

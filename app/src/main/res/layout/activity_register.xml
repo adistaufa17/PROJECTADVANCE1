@@ -131,22 +131,23 @@
                     style="@style/TextField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:hint="School"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:hint="Sekolah"
                     app:startIconDrawable="@drawable/ic_school"
+                    app:endIconMode="dropdown_menu"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/til_phone">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/et_school"
                         style="@style/TextFieldInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:text="@={viewModel.school}" />
+                        android:minHeight="@dimen/_42sdp"
+                        android:text="@={viewModel.school}"
+                        tools:ignore="SpeakableTextPresentCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Password Input -->

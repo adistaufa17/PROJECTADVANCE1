@@ -40,13 +40,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val userId = getUserIdFromPrefs() // Ambil ID user dari SharedPreferences atau session login
+        val userId = getUserIdFromPrefs()
 
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             viewModel.updateFcmToken(token)
         }
 
-        // Cek permission notifikasi untuk Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -142,6 +141,14 @@ class MainActivity : AppCompatActivity() {
                 .load(imageUrl)
                 .circleCrop()
                 .into(binding.ivUserAvatar)
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshAllData(this)
+        }
+
+        viewModel.friendList.observe(this) {
+            binding.swipeRefresh.isRefreshing = false
         }
 
     }

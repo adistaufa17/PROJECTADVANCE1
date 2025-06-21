@@ -26,7 +26,6 @@ class ProfileActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        // Arahkan ke halaman Edit Profile
         binding.btnEdit.setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
         }
@@ -48,5 +47,10 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadProfileData()
+        }
+
     }
 }

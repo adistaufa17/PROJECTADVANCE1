@@ -126,7 +126,7 @@
                         android:contentDescription="Profile picture" />
 
                 </androidx.cardview.widget.CardView>
-                
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
