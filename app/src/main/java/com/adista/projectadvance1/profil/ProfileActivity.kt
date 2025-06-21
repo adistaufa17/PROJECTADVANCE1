@@ -48,9 +48,6 @@ class ProfileActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadProfileData()
-        }
 
     }
 }
