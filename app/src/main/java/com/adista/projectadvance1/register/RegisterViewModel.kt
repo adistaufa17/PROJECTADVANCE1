@@ -14,14 +14,12 @@ class RegisterViewModel @Inject constructor(
     private val session: CoreSession
 ) : ViewModel() {
 
-    // Data input pengguna
     val name = MutableLiveData<String>()
     val phone = MutableLiveData<String>()
     val school = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val confirmPassword = MutableLiveData<String>()
 
-    // Untuk loading dan error UI
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -31,7 +29,6 @@ class RegisterViewModel @Inject constructor(
     private val _registerSuccess = MutableLiveData<Boolean>()
     val registerSuccess: LiveData<Boolean> = _registerSuccess
 
-    // Fungsi register utama
     fun register(name: String, phone: String, school: String, password: String, passwordConfirmation: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -40,7 +37,6 @@ class RegisterViewModel @Inject constructor(
                 val response = apiService.register(request)
 
                 if (response.isSuccessful) {
-                    // Tidak menyimpan token atau session di sini
                     _registerSuccess.value = true
                 } else {
                     val errorBody = response.errorBody()?.string()
@@ -57,7 +53,6 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    // Tombol register di-klik → validasi → panggil fungsi `register`
     fun onRegisterClick() {
         val nameValue = name.value.orEmpty()
         val phoneValue = phone.value.orEmpty()

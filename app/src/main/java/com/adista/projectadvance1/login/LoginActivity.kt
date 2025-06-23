@@ -64,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                 session.setValue("IS_LOGGED_IN", true)
                 session.setValue("USER_PHONE", viewModel.phone.value ?: "")
 
-                // 🔥 Kirim FCM token
                 com.google.firebase.messaging.FirebaseMessaging.getInstance().token
                     .addOnSuccessListener { token ->
                         viewModel.sendFcmTokenToServer(token)
@@ -79,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
         viewModel.errorMessage.observe(this) { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
-            // Tampilkan error merah di input sesuai isi pesan
             when {
                 message.contains("nomor", true) -> {
                     binding.phoneInputLayout.error = message

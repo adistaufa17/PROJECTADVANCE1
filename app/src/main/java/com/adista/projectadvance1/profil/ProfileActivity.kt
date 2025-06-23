@@ -42,7 +42,6 @@ class ProfileActivity : AppCompatActivity() {
                 .into(binding.ivProfile)
         }
 
-        // Back button
         binding.btnBack.setOnClickListener {
             finish()
         }

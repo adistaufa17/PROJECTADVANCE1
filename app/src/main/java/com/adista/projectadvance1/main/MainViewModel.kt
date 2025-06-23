@@ -39,14 +39,18 @@ class MainViewModel @Inject constructor(
     private val _userPhoto = MutableLiveData<String?>()
     val userPhoto: LiveData<String?> = _userPhoto
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> = _errorMessage
+
+    private val _noData = MutableLiveData<Boolean>()
+    val noData: LiveData<Boolean> = _noData
+
     init {
         _userName.value = session.getString("USER_NAME") ?: "Your Name"
         _userPhoto.value = session.getString("USER_PHOTO")
-    }
-
-    fun onFriendsClick() {
-        println("Friends clicked")
-        // Tambahkan intent kalau sudah siap
     }
 
     fun onProfileClick() {
@@ -63,8 +67,13 @@ class MainViewModel @Inject constructor(
 
 
     fun getFriends(context: Context) = viewModelScope.launch {
+        _isLoading.postValue(true)
+        _errorMessage.postValue(null)
+        _noData.postValue(false)
+
         if (!NetworkHelper.isNetworkAvailable(context)) {
-            println("Tidak ada koneksi internet.")
+            _errorMessage.postValue("Tidak ada koneksi internet.")
+            _isLoading.postValue(false)
             return@launch
         }
 
@@ -75,15 +84,21 @@ class MainViewModel @Inject constructor(
                 originalList = response.data
                 _friendList.postValue(originalList)
                 _userName.postValue(session.getString("USER_NAME"))
+                _noData.postValue(false)
             } else {
-                Log.w("FRIEND_API", "Data teman kosong dari server")
+                _friendList.postValue(emptyList())
+                _noData.postValue(true)
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("FRIEND_API", "Error saat mengambil data teman", e)
+            _errorMessage.postValue("Gagal memuat data: ${e.message}")
+            _noData.postValue(true)
+        } finally {
+            _isLoading.postValue(false)
         }
     }
+
 
 
     fun updateFcmToken(token: String) = viewModelScope.launch {
@@ -105,7 +120,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun refreshAllData(context: Context) {
-        getFriends(context) // ambil ulang list teman
+        getFriends(context)
         _userName.postValue(session.getString("USER_NAME")) // refresh nama dari session
         _userPhoto.postValue(session.getString("USER_PHOTO")) // refresh foto dari session
     }
@@ -113,7 +128,6 @@ class MainViewModel @Inject constructor(
     fun onLogoutClick() {
         session.clearAll()
         println("Logout clicked")
-        // Tambahkan intent ke LoginActivity kalau mau auto logout
     }
 
     fun onSeeAllClick() {

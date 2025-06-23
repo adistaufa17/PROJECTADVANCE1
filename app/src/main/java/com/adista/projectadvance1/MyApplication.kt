@@ -52,7 +52,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("FCM_TOKEN", "New token: $token")
-        // Kirim token ini ke server saat login
     }
 }
 

@@ -89,6 +89,7 @@
                         style="@style/IvProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:src="@drawable/ic_person"
                         app:imageUrl="@{viewModel.photoUrl}"
                         android:contentDescription="@string/profile_picture" />
 

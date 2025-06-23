@@ -4,8 +4,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import com.crocodic.core.data.CoreSession
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,13 +38,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var friendAdapter: FriendAdapter
     private val viewModel: MainViewModel by viewModels()
-    val profilViewModel: ProfilViewModel by viewModels()
+    private val profilViewModel: ProfilViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val userId = getUserIdFromPrefs()
+        getUserIdFromPrefs()
 
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             viewModel.updateFcmToken(token)
@@ -153,17 +155,32 @@ class MainActivity : AppCompatActivity() {
             binding.swipeRefresh.isRefreshing = false
         }
 
+        viewModel.isLoading.observe(this) { loading ->
+            binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.noData.observe(this) { noData ->
+            binding.tvNoData.visibility = if (noData) View.VISIBLE else View.GONE
+        }
+
+        viewModel.errorMessage.observe(this) { message ->
+            if (!message.isNullOrBlank()) {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            }
+        }
+
+
     }
 
     override fun onResume() {
         super.onResume()
         profilViewModel.loadProfileData()
         val token = session.getString("USER_TOKEN")
-        if (!token.isNullOrEmpty()) {
+        if (token.isNotEmpty()) {
             viewModel.getFriends(this)
             viewModel.refreshProfilePhoto()
         } else {
-            Log.e("MAIN", "Token kosong, tidak bisa ambil teman")
+            Timber.tag("MAIN").e("Token kosong, tidak bisa ambil teman")
         }
     }
 
@@ -172,7 +189,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getUserIdFromPrefs(): Int {
-        return session.getInt("USER_ID") ?: 0
+        return session.getInt("USER_ID")
     }
 
 

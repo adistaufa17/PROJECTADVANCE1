@@ -28,7 +28,6 @@ class FriendDetailActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        // Ambil data dari intent
         val json = intent.getStringExtra("FRIEND_DATA")
         if (json.isNullOrBlank()) {
             Toast.makeText(this, "Data teman tidak ditemukan", Toast.LENGTH_SHORT).show()
@@ -38,7 +37,6 @@ class FriendDetailActivity : AppCompatActivity() {
 
         friend = Gson().fromJson(json, FriendData::class.java)
 
-        // Isi data ke ViewModel dan tampilkan di UI
         bindFriendData()
 
         binding.btnBack.setOnClickListener {

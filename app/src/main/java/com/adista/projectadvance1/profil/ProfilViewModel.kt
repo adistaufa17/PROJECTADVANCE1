@@ -47,16 +47,13 @@ class ProfilViewModel @Inject constructor(
                     _school.postValue(it.school ?: "")
                     photoUrl.postValue(it.photo)
 
-                    // Simpan ulang ke session
                     session.setValue("USER_NAME", it.name)
                     session.setValue("USER_SCHOOL", it.school ?: "")
                     session.setValue("USER_PHOTO", it.photo ?: "")
                 }
             } else {
-                // Optional: handle error dari response
             }
         } catch (e: Exception) {
-            // Optional: handle error dari network
         }
     }
 

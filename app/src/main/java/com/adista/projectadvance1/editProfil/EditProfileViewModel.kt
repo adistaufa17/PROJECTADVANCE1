@@ -47,12 +47,10 @@ class EditProfileViewModel @Inject constructor(
                     if (result?.code == 200) {
                         val data = result.data
 
-                        // Update session
                         session.setValue("USER_NAME", data.name)
                         data.school?.let { session.setValue("USER_SCHOOL", it) }
                         data.photo?.let { session.setValue("USER_PHOTO", it) }
 
-                        // Update LiveData
                         name.postValue(data.name)
                         school.postValue(data.school)
                         photoUrl.postValue(data.photo)

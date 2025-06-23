@@ -24,14 +24,13 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Binding layout dengan ViewModel
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         setupObservers()
         setupClickListeners()
-        setupValidation() //  Validasi real-time
+        setupValidation()
         setupSchoolDropdown()
 
         binding.etSchool.setOnFocusChangeListener { view, hasFocus ->
@@ -77,7 +76,6 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString()
             val confirmPassword = binding.etConfirmPassword.text.toString()
 
-            // Validasi final sebelum kirim
             if (password.length < 8) {
                 binding.tilPassword.error = "Password minimal 8 karakter"
                 return@setOnClickListener
@@ -95,7 +93,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    // Validasi real-time saat mengetik
     private fun setupValidation() {
         binding.etPhone.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty() && !text.matches(Regex("^08[0-9]{8,}$"))) {
