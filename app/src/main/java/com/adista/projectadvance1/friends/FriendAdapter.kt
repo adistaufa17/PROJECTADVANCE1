@@ -1,5 +1,6 @@
 package com.adista.projectadvance1.friends
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ItemFriendBinding
 import com.adista.projectadvance1.model.FriendData
 import com.bumptech.glide.Glide
+import timber.log.Timber
 
 class FriendAdapter(
     private var friends: List<FriendData>,
@@ -44,8 +46,9 @@ class FriendAdapter(
 
     override fun getItemCount(): Int = friends.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newList: List<FriendData>) {
-        Log.d("FriendAdapter", "Updating list with ${newList.size} items")
+        Timber.tag("FriendAdapter").d("%s items", "Updating list with " + newList.size)
         friends = newList
         notifyDataSetChanged()
     }

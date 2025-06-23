@@ -24,7 +24,7 @@ class EditPasswordActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             viewModel.changePassword { success, message ->
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                if (success) finish() // kembali ke profil setelah berhasil
+                if (success) finish()
             }
         }
 

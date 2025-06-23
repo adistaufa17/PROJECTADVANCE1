@@ -3,15 +3,13 @@ package com.adista.projectadvance1.register
 import androidx.lifecycle.*
 import com.adista.projectadvance1.core.network.ApiService
 import com.adista.projectadvance1.request.RegisterRequest
-import com.crocodic.core.data.CoreSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val apiService: ApiService,
-    private val session: CoreSession
+    private val apiService: ApiService
 ) : ViewModel() {
 
     val name = MutableLiveData<String>()

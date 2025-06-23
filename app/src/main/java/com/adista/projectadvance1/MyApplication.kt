@@ -1,19 +1,15 @@
 package com.adista.projectadvance1
 
 import android.app.Application
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.adista.projectadvance1.core.network.ApiService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.HiltAndroidApp
-import retrofit2.Call
-import retrofit2.Callback
 
 @HiltAndroidApp
 class MyApplication : Application()

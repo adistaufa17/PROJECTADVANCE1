@@ -1,7 +1,6 @@
 package com.adista.projectadvance1.main
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,7 @@ import com.crocodic.core.data.CoreSession
 import com.crocodic.core.helper.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
     val noData: LiveData<Boolean> = _noData
 
     init {
-        _userName.value = session.getString("USER_NAME") ?: "Your Name"
+        _userName.value = session.getString("USER_NAME")
         _userPhoto.value = session.getString("USER_PHOTO")
     }
 
@@ -106,12 +106,12 @@ class MainViewModel @Inject constructor(
             val response = apiService.updateFcmToken(token)
 
             if (response.isSuccessful) {
-                Log.d("FCM", "Token berhasil dikirim")
+                Timber.tag("FCM").d("Token berhasil dikirim")
             } else {
-                Log.e("FCM", "Gagal kirim token: ${response.code()}")
+                Timber.tag("FCM").e("Gagal kirim token: %s", response.code())
             }
         } catch (e: Exception) {
-            Log.e("FCM", "Error: ${e.message}")
+            Timber.tag("FCM").e("Error: %s", e.message)
         }
     }
 

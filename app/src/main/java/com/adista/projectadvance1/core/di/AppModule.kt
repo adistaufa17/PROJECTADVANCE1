@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import com.adista.projectadvance1.Constants
 import com.adista.projectadvance1.core.network.ApiService
 import com.crocodic.core.data.CoreSession
-import com.crocodic.core.helper.NetworkHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +28,7 @@ object AppModule {
         return Interceptor { chain ->
             val token = session.getString("USER_TOKEN")
             val request = chain.request().newBuilder()
-            if (!token.isNullOrEmpty()) {
+            if (token.isNotEmpty()) {
                 request.addHeader("Authorization", "Bearer $token")
             }
             chain.proceed(request.build())
@@ -40,7 +39,7 @@ object AppModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY // Log semua request dan response
+            level = HttpLoggingInterceptor.Level.BODY
         }
     }
 
@@ -51,7 +50,7 @@ object AppModule {
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor) // Token disisipkan di sini
+            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

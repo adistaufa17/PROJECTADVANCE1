@@ -1,18 +1,18 @@
 package com.adista.projectadvance1.friends
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.adista.projectadvance1.util.ImageUtil
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityFriendDetailBinding
 import com.adista.projectadvance1.model.FriendData
+import com.adista.projectadvance1.util.ImageUtil
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FriendDetailActivity : AppCompatActivity() {
@@ -48,7 +48,7 @@ class FriendDetailActivity : AppCompatActivity() {
         }
 
         binding.btnWhatsapp.setOnClickListener {
-            Log.d("WHATSAPP", "Tombol WhatsApp diklik: ${friend.phone}")
+            Timber.tag("WHATSAPP").d("Tombol WhatsApp diklik: %s", friend.phone)
             viewModel.openWhatsapp(this, friend.phone)
         }
     }
@@ -64,7 +64,7 @@ class FriendDetailActivity : AppCompatActivity() {
                     .load(imageUrl)
                     .centerCrop()
                     .into(binding.ivProfile)
-                Log.d("PHOTO_URL", "Friend photo URL: $imageUrl")
+                Timber.tag("PHOTO_URL").d("Friend photo URL: %s", imageUrl)
             } else {
                 binding.ivProfile.setImageResource(R.drawable.ic_person)
             }

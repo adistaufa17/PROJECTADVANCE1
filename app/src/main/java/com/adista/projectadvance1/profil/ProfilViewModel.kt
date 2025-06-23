@@ -1,11 +1,13 @@
 package com.adista.projectadvance1.profil
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.adista.projectadvance1.core.network.ApiService
 import com.crocodic.core.data.CoreSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,12 +52,17 @@ class ProfilViewModel @Inject constructor(
                     session.setValue("USER_NAME", it.name)
                     session.setValue("USER_SCHOOL", it.school ?: "")
                     session.setValue("USER_PHOTO", it.photo ?: "")
+                } ?: run { println("Profil berhasil diambil, tapi data kosong.")
                 }
             } else {
+                println("Gagal mengambil profil: ${response.code()} - ${response.message()}")
             }
         } catch (e: Exception) {
+            e.printStackTrace()
+            println("Terjadi kesalahan saat mengambil profil: ${e.message}")
         }
     }
+
 
 
 }

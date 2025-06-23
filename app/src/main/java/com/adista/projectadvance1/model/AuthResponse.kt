@@ -1,7 +1,5 @@
 package com.adista.projectadvance1.model
 
-import com.google.gson.annotations.SerializedName
-
 data class AuthResponse(
     val code: Int,
     val status: String,

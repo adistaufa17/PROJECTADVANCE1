@@ -68,7 +68,7 @@ class FriendDetailViewModel @Inject constructor(
 
     fun pokeFriend(friendId: Int, context: Context) = viewModelScope.launch {
         try {
-            val token = session.getString("USER_TOKEN")
+            session.getString("USER_TOKEN")
             val response = apiService.pokeFriend(friendId)
             if (response.isSuccessful) {
                 Toast.makeText(context, "Teman berhasil dicolek!", Toast.LENGTH_SHORT).show()

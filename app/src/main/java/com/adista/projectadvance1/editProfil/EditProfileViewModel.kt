@@ -31,8 +31,8 @@ class EditProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _loading.postValue(true)
             try {
-                val token = session.getString("user_token") ?: return@launch
-                val body = mutableMapOf<String, String>(
+                session.getString("user_token")
+                val body = mutableMapOf(
                     "name" to (name.value ?: ""),
                     "school" to (school.value ?: "")
                 )
@@ -73,7 +73,4 @@ class EditProfileViewModel @Inject constructor(
         }
     }
 
-    fun onLogoutClick() {
-        session.clearAll()
-    }
 }
