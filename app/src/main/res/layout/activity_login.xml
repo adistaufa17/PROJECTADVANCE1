@@ -31,31 +31,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <!-- Background Image (Classroom) -->
         <ImageView
             android:id="@+id/iv_background"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:contentDescription="Login Image"
             android:scaleType="centerCrop"
             android:src="@drawable/classroom_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_percent="0.35" />
+            app:layout_constraintHeight_percent="0.35"
+            tools:ignore="HardcodedText" />
 
-        <!-- Wave Background -->
         <ImageView
             android:id="@+id/iv_wave"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:contentDescription="@string/login_register_accessoris"
             android:scaleType="fitXY"
             android:src="@drawable/wave_background"
             app:layout_constraintBottom_toBottomOf="@id/iv_background"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ImageContrastCheck" />
 
-        <!-- Login Content Container -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_login"
             android:layout_width="match_parent"
@@ -66,35 +66,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_background">
 
-            <!-- Welcome Back Text -->
             <TextView
                 android:id="@+id/tv_welcome_back"
                 style="@style/tvTitleRegisterLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome Back"
+                android:text="@string/welcome_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Subtitle Text -->
             <TextView
                 android:id="@+id/tv_subtitle"
                 style="@style/tvSubtitleLoginRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login to your account"
+                android:text="@string/login_to_your_account"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_welcome_back" />
 
-            <!-- Phone Number Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phoneInputLayout"
                 style="@style/TextField"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Phone Number"
+                android:hint="@string/phone_number"
                 app:startIconDrawable="@drawable/ic_phone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,10 +103,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:text="@={viewModel.phone}" />
+                    android:text="@={viewModel.phone}"
+                    tools:ignore="VisualLintTextFieldSize" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordInputLayout"
                 style="@style/TextField"
@@ -118,7 +115,7 @@
                 app:startIconDrawable="@drawable/ic_lock"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/navy"
-                android:hint="Password"
+                android:hint="@string/password"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/phoneInputLayout">
@@ -129,29 +126,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:text="@={viewModel.password}"/>
+                    android:text="@={viewModel.password}"
+                    tools:ignore="VisualLintTextFieldSize" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
                 style="@style/loginregisterBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewModel.onLoginClick()}"
-                android:text="Login"
+                android:text="@string/login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/passwordInputLayout" />
+                app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
+                tools:ignore="VisualLintButtonSize" />
 
-            <!-- Register Link -->
             <TextView
                 android:id="@+id/tv_register"
                 style="@style/tvLoginRegisterBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Do not have account? Register here"
+                android:text="@string/do_not_have_account_register_here"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_login" />

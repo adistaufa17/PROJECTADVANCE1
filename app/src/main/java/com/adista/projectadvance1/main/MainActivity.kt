@@ -19,6 +19,7 @@ import com.adista.projectadvance1.friends.FriendAdapter
 import com.adista.projectadvance1.friends.FriendDetailActivity
 import com.adista.projectadvance1.friends.FriendsActivity
 import com.adista.projectadvance1.login.LoginActivity
+import com.adista.projectadvance1.profil.ProfilViewModel
 import com.adista.projectadvance1.profil.ProfileActivity
 import com.adista.projectadvance1.util.ImageUtil
 import com.bumptech.glide.Glide
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var friendAdapter: FriendAdapter
     private val viewModel: MainViewModel by viewModels()
+    val profilViewModel: ProfilViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,6 +157,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        profilViewModel.loadProfileData()
         val token = session.getString("USER_TOKEN")
         if (!token.isNullOrEmpty()) {
             viewModel.getFriends(this)

@@ -9,7 +9,7 @@ import com.adista.projectadvance1.editPassword.EditPasswordActivity
 import com.adista.projectadvance1.util.ImageUtil
 import com.adista.projectadvance1.R
 import com.adista.projectadvance1.databinding.ActivityProfilBinding
-import com.adista.projectadvance1.editProfil.EditProfileActivity // Import ke halaman EditProfile
+import com.adista.projectadvance1.editProfil.EditProfileActivity 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +34,6 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, EditPasswordActivity::class.java))
         }
 
-        // Observe photoUrl dan tampilkan
         viewModel.photoUrl.observe(this) { path ->
             val imageUrl = ImageUtil.getFullImageUrl(path)
             Glide.with(this)
@@ -47,7 +46,5 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
-
-
     }
 }

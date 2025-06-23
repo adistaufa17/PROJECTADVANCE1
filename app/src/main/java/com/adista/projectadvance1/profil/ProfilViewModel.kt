@@ -32,13 +32,32 @@ class ProfilViewModel @Inject constructor(
         photoUrl.value = session.getString("USER_PHOTO")
     }
 
-
     fun onLogoutClick() {
         session.clearAll()
     }
 
-    fun onBackClick() {
-        // opsional jika ingin kembali manual
+    fun loadProfileData() = viewModelScope.launch {
+        try {
+            val response = apiService.getProfile()
+
+            if (response.isSuccessful) {
+                val data = response.body()?.data
+                data?.let {
+                    _name.postValue(it.name)
+                    _school.postValue(it.school ?: "")
+                    photoUrl.postValue(it.photo)
+
+                    // Simpan ulang ke session
+                    session.setValue("USER_NAME", it.name)
+                    session.setValue("USER_SCHOOL", it.school ?: "")
+                    session.setValue("USER_PHOTO", it.photo ?: "")
+                }
+            } else {
+                // Optional: handle error dari response
+            }
+        } catch (e: Exception) {
+            // Optional: handle error dari network
+        }
     }
 
 

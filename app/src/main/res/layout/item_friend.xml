@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,15 +24,13 @@
                 android:layout_height="@dimen/_46sdp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_person"
-                android:contentDescription="Profile picture"
+                android:contentDescription="@string/profile_picture"
                 android:padding="@dimen/_4sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:shapeAppearanceOverlay="@style/RoundedCornerImageView" />
 
-
-            <!-- Friend Info -->
             <LinearLayout
                 android:id="@+id/layout_info"
                 android:layout_width="0dp"
@@ -46,17 +42,17 @@
                 app:layout_constraintStart_toEndOf="@id/iv_profile"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!-- Name with Icon -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="@dimen/_16sdp"
                         android:layout_height="@dimen/_16sdp"
-                        android:contentDescription="Person Icon"
+                        android:contentDescription="@string/person_icon"
                         android:src="@drawable/ic_person"
                         app:tint="@color/navy" />
 
@@ -77,12 +73,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="@dimen/_16sdp"
                         android:layout_height="@dimen/_16sdp"
-                        android:contentDescription="School Icon"
+                        android:contentDescription="@string/school_icon"
                         android:src="@drawable/ic_school"
                         app:tint="@color/navy" />
 
@@ -92,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:textColor="@color/navy"
-                        android:textSize="@dimen/_12ssp"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="SMKN 1 PURWOKERTO" />
                 </LinearLayout>
             </LinearLayout>

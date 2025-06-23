@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <!-- Top Navy Background -->
         <View
             android:id="@+id/view_top_background"
             android:layout_width="match_parent"
@@ -24,38 +23,29 @@
             app:layout_constraintHeight_percent="0.35"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <!-- Top Bar -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_bar"
+            style="@style/topBarProfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Back Button -->
             <ImageButton
                 android:id="@+id/btn_back"
+                style="@style/BtnBack"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back button"
-                android:src="@drawable/ic_back"
+                android:contentDescription="@string/back_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@android:color/white"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Profile"
+                android:text="@string/edit_profile"
                 style="@style/TitleActivity"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +54,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Profile Section -->
         <LinearLayout
             android:id="@+id/profile_section"
             android:layout_width="match_parent"
@@ -76,7 +65,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_bar">
 
-            <!-- Profile Picture -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_profile_picture"
                 android:layout_width="150dp"
@@ -88,10 +76,9 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_profile"
+                    style="@style/cardProfile"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="150dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -99,24 +86,19 @@
 
                     <ImageView
                         android:id="@+id/iv_profile"
+                        style="@style/IvProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:background="#6E7096"
-                        android:src="@drawable/ic_person"
                         app:imageUrl="@{viewModel.photoUrl}"
-                        android:contentDescription="Profile picture" />
+                        android:contentDescription="@string/profile_picture" />
 
                 </androidx.cardview.widget.CardView>
 
                 <ImageView
                     android:id="@+id/iv_edit_photo"
+                    style="@style/btnEdit"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/circle_background"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_edit"
-                    app:tint="#272B5A"
                     android:contentDescription="@string/edit_photo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -131,8 +113,7 @@
             style="@style/TextField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_6sdp"
-            android:hint="Nama"
+            android:hint="@string/nama"
             app:startIconDrawable="@drawable/ic_person"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -143,11 +124,11 @@
                 style="@style/TextFieldInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/_6sdp"
                 android:inputType="textPersonName"
                 android:gravity="center_vertical"
                 android:paddingTop="12dp"
-                android:text="@={viewModel.name}" />
+                android:text="@={viewModel.name}"
+                tools:ignore="VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -155,8 +136,7 @@
             style="@style/TextField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_6sdp"
-            android:hint="Sekolah"
+            android:hint="@string/sekolah"
             app:startIconDrawable="@drawable/ic_school"
             app:endIconMode="dropdown_menu"
             app:layout_constraintEnd_toEndOf="parent"
@@ -171,25 +151,20 @@
                 android:inputType="text"
                 android:minHeight="@dimen/_42sdp"
                 android:text="@={viewModel.school}"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Tombol Simpan -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
+            style="@style/loginregisterBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginHorizontal="@dimen/_24sdp"
-            android:text="Simpan"
-            android:backgroundTint="@color/navy"
-            android:textColor="@color/white"
-            app:cornerRadius="@dimen/_24sdp"
+            android:text="@string/simpan"
             app:layout_constraintTop_toBottomOf="@id/til_school"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="VisualLintButtonSize" />
 
-        <!-- ProgressBar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="48dp"

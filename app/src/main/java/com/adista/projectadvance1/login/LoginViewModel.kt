@@ -39,8 +39,10 @@ class LoginViewModel @Inject constructor(
                         session.setValue("USER_NAME", body.data.name)
                         session.setValue("USER_PHONE", body.data.phone)
                         session.setValue("USER_SCHOOL", body.data.school ?: "")
-                        session.setValue("IS_LOGGED_IN", true)
+                        session.setValue("USER_PHOTO", body.data.photo ?: "")
                         session.setValue("USER_TOKEN", body.data.token)
+                        session.setValue("IS_LOGGED_IN", true)
+
 
                         _loginResult.value = true
                     } else {

@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <!-- Top Navy Background -->
         <View
             android:id="@+id/view_top_background"
             android:layout_width="match_parent"
@@ -24,38 +23,32 @@
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Top Bar -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_bar"
+            style="@style/topBarProfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Back Button -->
             <ImageButton
                 android:id="@+id/btn_back"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back button"
+                android:contentDescription="@string/back_button"
                 android:onClick="@{() -> viewModel.onBackClick()}"
                 android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@android:color/white"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Detail Teman"
+                android:text="@string/detail_teman"
                 style="@style/TitleActivity"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +57,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Profile Section -->
         <LinearLayout
             android:id="@+id/profile_section"
             android:layout_width="match_parent"
@@ -76,83 +68,65 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_bar">
 
-            <!-- Profile Picture -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_profile"
+                style="@style/cardProfile"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="20dp"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="4dp">
+                android:layout_height="100dp">
 
                 <ImageView
                     android:id="@+id/iv_profile"
+                    style="@style/IvProfile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:background="#D9D9D9"
-                    android:contentDescription="Profile picture"
-                    android:src="@drawable/ic_person" />
+                    android:contentDescription="@string/profile_picture"
+                    tools:ignore="ImageContrastCheck" />
 
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Name -->
             <TextView
                 android:id="@+id/tv_name"
+                style="@style/TvProfil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:text="@{viewModel.name}"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 tools:text="Adista Nurul Fadilah" />
 
         </LinearLayout>
 
-        <!-- Detail Information Cards Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_margin="@dimen/_24sdp"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/view_top_background">
 
-            <!-- SMK Information Card -->
             <androidx.cardview.widget.CardView
+                style="@style/tvCard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/greyblue"
-                app:cardCornerRadius="12dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="12dp"
-                        android:src="@drawable/ic_school"
-                        app:tint="#272B5A" />
+                        style="@style/icTextField"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:contentDescription="@string/school_icon"
+                        android:src="@drawable/ic_school" />
 
                     <TextView
                         android:id="@+id/tv_school"
+                        style="@style/tvDetail"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@{viewModel.school}"
-                        android:textColor="#272B5A"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
                         tools:text="SMK N 1 PURWOKERTO" />
 
                 </LinearLayout>
@@ -160,126 +134,107 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Phone Number Card -->
             <androidx.cardview.widget.CardView
+                style="@style/tvCard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/greyblue"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
+                        style="@style/icTextField"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="12dp"
-                        android:src="@drawable/ic_phone"
-                        app:tint="#272B5A" />
+                        android:contentDescription="@string/call_icon"
+                        android:src="@drawable/ic_phone" />
 
                     <TextView
                         android:id="@+id/tv_phone"
+                        style="@style/tvDetail"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@{viewModel.phone}"
-                        android:textColor="#272B5A"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
                         tools:text="+62 XXX XXX XXXX" />
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Action Buttons Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <!-- Call Button -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btn_colek"
+                    style="@style/btnDetailTeman"
+                    app:cardBackgroundColor="@color/blueSky"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="#4285F4"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginEnd="@dimen/_5sdp">
 
                     <LinearLayout
+                        style="@style/btnLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
+                        tools:ignore="ExtraText,UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="6dp"
-                            android:src="@drawable/ic_colek"
-                            app:tint="@android:color/white" />
+                            style="@style/icBtnDetail"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:contentDescription="@string/colek_icon" android:src="@drawable/ic_colek"/>
 
                         <TextView
+                            style="@style/tvBtnDetail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Colek"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:text="@string/colek" />
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- WhatsApp Button -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btn_whatsapp"
+                    style="@style/btnDetailTeman"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="#25D366"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginStart="@dimen/_5sdp"
+                    app:cardBackgroundColor="@color/green">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="16dp">
+                        android:padding="16dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginEnd="6dp"
+                            android:contentDescription="@string/call_icon"
                             android:src="@drawable/ic_phone"
-                            app:tint="@android:color/white" />
+                            app:tint="@android:color/white"
+                            tools:ignore="ImageContrastCheck" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="WhatsApp"
+                            android:text="@string/whatsapp"
                             android:textColor="@android:color/white"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:ignore="TextContrastCheck" />
 
                     </LinearLayout>
 
